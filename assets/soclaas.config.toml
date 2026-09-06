@@ -1,0 +1,10 @@
+model = "coding"
+model_provider = "soclaas"
+model_reasoning_effort = "none"
+model_catalog_json = "~/.codex/soclaas-model-catalog.json"
+
+[model_providers.soclaas]
+name = "SoCLaaS Endpoint"
+base_url = "https://soclaas-api.comp.nus.edu.sg/v1"
+env_key = "SOCLAAS_API_KEY"
+wire_api = "responses"
