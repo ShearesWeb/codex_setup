@@ -30,5 +30,5 @@ codex
 
 ## Requirements
 
-- `bash` (or a shell that runs the script with `sh`), `curl`, `git`
+- `bash` (or a shell that runs the script with `sh`) and `curl`
 - An existing `codex` binary on `PATH`
