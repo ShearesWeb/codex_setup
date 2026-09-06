@@ -23,6 +23,9 @@ CONFIG_DIR="$HOME/.config/soclaas"
 CODEX_DIR="$HOME/.codex"
 ENV_FILE="$CONFIG_DIR/soclaas.env"
 ALIAS_LINE="alias codex='codex --profile soclaas'"
+ENV_LOAD_START='if [ -f "$HOME/.config/soclaas/soclaas.env" ]; then'
+ENV_LOAD_SOURCE='  . "$HOME/.config/soclaas/soclaas.env"'
+ENV_LOAD_END='fi'
 
 fail() {
     printf 'ERROR: %s\n' "$1" >&2
@@ -114,6 +117,17 @@ if ! grep -Fqx "$ALIAS_LINE" "$rc_file"; then
     printf '\n%s\n' "$ALIAS_LINE" >> "$rc_file"
 fi
 
+# Export the SocLaas variables whenever the selected shell starts (idempotent).
+if ! grep -Fqx "$ENV_LOAD_START" "$rc_file"; then
+    {
+        printf '\n%s\n' "$ENV_LOAD_START"
+        printf '  set -a\n'
+        printf '%s\n' "$ENV_LOAD_SOURCE"
+        printf '  set +a\n'
+        printf '%s\n' "$ENV_LOAD_END"
+    } >> "$rc_file"
+fi
+
 # --- done -------------------------------------------------------------------------------
 command -v codex >/dev/null 2>&1 || \
     printf 'NOTE: codex not found on PATH; install the Codex CLI if you have not already.\n'
@@ -121,4 +135,5 @@ command -v codex >/dev/null 2>&1 || \
 printf 'SOCLAAS environment saved to %s\n' "$ENV_FILE"
 printf 'Codex assets copied to %s\n' "$CODEX_DIR"
 printf 'Alias added to %s\n' "$rc_file"
+printf 'SocLaas environment loading added to %s\n' "$rc_file"
 printf 'Run: source %s\n' "$rc_file"
